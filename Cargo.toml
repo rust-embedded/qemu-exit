@@ -1,0 +1,21 @@
+[package]
+name = "qemu-exit"
+version = "0.1.0"
+authors = ["Andre Richter <andre.o.richter@gmail.com>"]
+description = "Exit QEMU with user-defined code"
+homepage = "https://github.com/andre-richter/qemu-exit"
+repository = "https://github.com/andre-richter/qemu-exit"
+readme = "README.md"
+keywords = ["aarch64", "x86", "x86_64", "cortex-a", "qemu", "exit"]
+categories = ["embedded", "hardware-support", "no-std"]
+license = "MIT/Apache-2.0"
+edition = "2018"
+exclude = [
+        ".gitignore",
+        ".rustfmt.toml",
+        ".vscode",
+        "Makefile"
+]
+
+[target.'cfg(target_arch = "x86_64")'.dependencies]
+x86_64 = "0.7.x"
