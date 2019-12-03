@@ -37,9 +37,12 @@ fn semihosting_sys_exit_call(block: &qemu_parameter_block) -> ! {
              : "memory"
              : "volatile"
         );
-
-        core::intrinsics::unreachable()
     }
+
+    // For the case that the QEMU exit attempt did not work, transition into an infinite loop.
+    // Calling `panic!()` here is unfeasible, since there is a good chance this function here is the
+    // last expression in the `panic!()` handler itself. This prevents a possible infinite loop.
+    loop {}
 }
 
 /// QEMU binary executes `exit(arg)`.

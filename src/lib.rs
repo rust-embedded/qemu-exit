@@ -36,9 +36,10 @@
 //! ```
 //! qemu_exit::x86::exit<{ 0xf4 }>(arg) // Use a custom code. Argument must implement `Into<u32>`.
 //! ```
+//! ### Note
 //!
-//! The QEMU binary will execute `exit((arg << 1) | 1)`.
-//! - Note: With `isa-debug-exit`, it is not possible to let QEMU invoke `exit(0)`.
+//! The QEMU binary will execute `exit((arg << 1) | 1)`. The is hardcoded in the QEMU sources.
+//! Therefore, with `isa-debug-exit`, it is not possible to let QEMU invoke `exit(0)`.
 //!
 //! # Literature
 //!
