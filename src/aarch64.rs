@@ -34,7 +34,7 @@ fn semihosting_sys_exit_call(block: &qemu_parameter_block) -> ! {
              hlt #0xF000"
              : // No Outputs
              : "r"(block as *const _ as u64)
-             : "memory", "w0"
+             : "w0", "x1", "memory"
              : "volatile"
         );
     }
