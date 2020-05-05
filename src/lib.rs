@@ -51,6 +51,7 @@
 #![feature(asm)]
 #![feature(const_generics)]
 #![feature(core_intrinsics)]
+#![feature(llvm_asm)]
 #![no_std]
 
 #[cfg(target_arch = "aarch64")]
