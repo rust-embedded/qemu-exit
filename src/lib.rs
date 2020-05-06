@@ -48,7 +48,6 @@
 
 #![allow(incomplete_features)]
 #![deny(missing_docs)]
-#![feature(asm)]
 #![feature(const_generics)]
 #![feature(core_intrinsics)]
 #![feature(llvm_asm)]
