@@ -40,7 +40,7 @@ qemu_exit::x86::exit<{ 0xf4 }>(arg) // Use a custom code. Argument must implemen
 
 ### Note
 
-The QEMU binary will execute `exit((arg << 1) | 1)`. The is hardcoded in the
+The QEMU binary will execute `exit((arg << 1) | 1)`. This is hardcoded in the
 QEMU sources. Therefore, with `isa-debug-exit`, it is not possible to let QEMU
 invoke `exit(0)`.
 
