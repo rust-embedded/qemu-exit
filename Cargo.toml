@@ -18,4 +18,4 @@ exclude = [
 ]
 
 [target.'cfg(target_arch = "x86_64")'.dependencies]
-x86_64 = "0.7.x"
+x86_64 = "0.11.4"
