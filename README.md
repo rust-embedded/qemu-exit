@@ -30,7 +30,7 @@ You need to chose a machine with the sifive_test device, for exemple ``-M virt``
 ## Examples
 
 Exit the QEMU session from anywhere in your code:
-```
+```rust
 qemu_exit::riscv64::exit_success() // QEMU binary executes `exit(0)`.
 qemu_exit::riscv64::exit_failure() // QEMU binary executes `exit(1)`.
 qemu_exit::riscv64::exit(arg)      // Use a custom code. Argument must implement `Into<u64>`.
