@@ -81,4 +81,4 @@ mod host_stubs;
 pub use host_stubs::*;
 
 #[cfg(target_arch = "riscv64")]
-pub mod aarch64;
+pub mod riscv64;
