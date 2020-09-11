@@ -23,6 +23,18 @@ qemu_exit::aarch64::exit_success() // QEMU binary executes `exit(0)`.
 qemu_exit::aarch64::exit_failure() // QEMU binary executes `exit(1)`.
 qemu_exit::aarch64::exit(arg)      // Use a custom code. Argument must implement `Into<u64>`.
 ```
+# RISCV64
+
+You need to chose a machine with the sifive_test device, for exemple ``-M virt``
+
+## Examples
+
+Exit the QEMU session from anywhere in your code:
+```
+qemu_exit::riscv64::exit_success() // QEMU binary executes `exit(0)`.
+qemu_exit::riscv64::exit_failure() // QEMU binary executes `exit(1)`.
+qemu_exit::riscv64::exit(arg)      // Use a custom code. Argument must implement `Into<u64>`.
+```
 
 # x86_64
 
@@ -48,6 +60,7 @@ invoke `exit(0)`.
 
 - [Semihosting for AArch32 and AArch64](https://static.docs.arm.com/dui0003/b/semihosting.pdf)
 - [QEMU isa-debug-exit source](https://git.qemu.org/?p=qemu.git;a=blob;f=hw/misc/debugexit.c)
+- [QEMU sifive_test source](https://git.qemu.org/?p=qemu.git;a=blob_plain;f=hw/riscv/sifive_test.c;hb=HEAD)
 
 ## License
 
