@@ -23,6 +23,19 @@
 //! qemu_exit::aarch64::exit(arg)      // Use a custom code. Argument must implement `Into<u64>`.
 //! ```
 //!
+//! # RISCV64
+//!
+//! You need to chose a machine with the sifive_test device, for exemple ``-M virt``
+//!
+//! ## Examples
+//!
+//! Exit the QEMU session from anywhere in your code:
+//! ```
+//! qemu_exit::riscv64::exit_success() // QEMU binary executes `exit(0)`.
+//! qemu_exit::riscv64::exit_failure() // QEMU binary executes `exit(1)`.
+//! qemu_exit::riscv64::exit(arg)      // Use a custom code. Argument must implement `Into<u64>`.
+//! ```
+//!
 //! # x86_64
 //!
 //! Add the special ISA debug exit device by passing the flags:
@@ -41,19 +54,6 @@
 //! The QEMU binary will execute `exit((arg << 1) | 1)`. The is hardcoded in the QEMU sources.
 //! Therefore, with `isa-debug-exit`, it is not possible to let QEMU invoke `exit(0)`.
 //!
-//! # RISCV64
-//!
-//! You need to chose a machine with the test sifive_test device, for exemple ``-M virt``
-//!
-//! ## Examples
-//!
-//! Exit the QEMU session from anywhere in your code:
-//! ```
-//! qemu_exit::riscv64::exit_success() // QEMU binary executes `exit(0)`.
-//! qemu_exit::riscv64::exit_failure() // QEMU binary executes `exit(1)`.
-//! qemu_exit::riscv64::exit(arg)      // Use a custom code. Argument must implement `Into<u64>`.
-//! ```
-//!
 //! # Literature
 //!
 //!  - [Semihosting for AArch32 and AArch64](https://static.docs.arm.com/dui0003/b/semihosting.pdf)
@@ -71,6 +71,9 @@
 #[cfg(target_arch = "aarch64")]
 pub mod aarch64;
 
+#[cfg(target_arch = "riscv64")]
+pub mod riscv64;
+
 #[cfg(target_arch = "x86_64")]
 pub mod x86;
 
@@ -79,6 +82,3 @@ mod host_stubs;
 
 #[cfg(target_arch = "x86_64")]
 pub use host_stubs::*;
-
-#[cfg(target_arch = "riscv64")]
-pub mod riscv64;
