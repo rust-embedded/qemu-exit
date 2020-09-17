@@ -5,13 +5,14 @@
 //! x86_64 QEMU exit.
 
 /// QEMU binary executes `exit((code << 1) | 1)`.
-pub fn exit<T, const DEBUG_EXIT_IOBASE: u16>(code: T) -> !
+pub fn exit<T, U>(addr: T, code: U) -> !
 where
-    T: Into<u32>,
+    T: Into<u16>,
+    U: Into<u32>,
 {
     use x86_64::instructions::port::Port;
 
-    let mut port = Port::new(DEBUG_EXIT_IOBASE);
+    let mut port = Port::new(addr.into());
     unsafe { port.write(code.into()) };
 
     // For the case that the QEMU exit attempt did not work, transition into an infinite loop.
