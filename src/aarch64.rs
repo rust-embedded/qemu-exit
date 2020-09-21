@@ -19,7 +19,7 @@ const ADP_Stopped_ApplicationExit: u64 = 0x20026;
 #[repr(C)]
 struct qemu_parameter_block {
     arg0: u64,
-    arg1: u32,
+    arg1: u64,
 }
 
 /// AArch64 QemuExit info struct
@@ -62,7 +62,7 @@ impl QemuExit for AArch64 {
     fn exit<T: Into<u32>>(&self, code: T) -> ! {
         let block = qemu_parameter_block {
             arg0: ADP_Stopped_ApplicationExit,
-            arg1: code.into(),
+            arg1: code.into() as u64,
         };
 
         semihosting_sys_exit_call(&block)
