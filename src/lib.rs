@@ -58,7 +58,7 @@
 //!
 //!  - [Semihosting for AArch32 and AArch64](https://static.docs.arm.com/dui0003/b/semihosting.pdf)
 //!  - [QEMU isa-debug-exit source](https://git.qemu.org/?p=qemu.git;a=blob;f=hw/misc/debugexit.c)
-//!  - [QEMU sifive_test source](https://git.qemu.org/?p=qemu.git;a=blob_plain;f=hw/riscv/sifive_test.c;hb=HEAD)
+//!  - [QEMU sifive_test source](https://git.qemu.org/?p=qemu.git;a=blob;f=hw/misc/sifive_test.c)
 
 #![allow(incomplete_features)]
 #![deny(missing_docs)]
@@ -82,3 +82,17 @@ mod host_stubs;
 
 #[cfg(target_arch = "x86_64")]
 pub use host_stubs::*;
+
+/// QemuExit interface
+pub trait QemuExit {
+    /// Exit qemu with @code
+    fn exit<T: Into<u32>>(&self, code: T) -> !;
+    /// Exit qemue with success code
+    fn exit_success(&self) -> ! {
+        unimplemented!()
+    }
+    /// Exit qemue with failure code
+    fn exit_failure(&self) -> ! {
+        unimplemented!()
+    }
+}

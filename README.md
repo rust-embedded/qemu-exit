@@ -60,7 +60,7 @@ invoke `exit(0)`.
 
 - [Semihosting for AArch32 and AArch64](https://static.docs.arm.com/dui0003/b/semihosting.pdf)
 - [QEMU isa-debug-exit source](https://git.qemu.org/?p=qemu.git;a=blob;f=hw/misc/debugexit.c)
-- [QEMU sifive_test source](https://git.qemu.org/?p=qemu.git;a=blob_plain;f=hw/riscv/sifive_test.c;hb=HEAD)
+- [QEMU sifive_test source](https://git.qemu.org/?p=qemu.git;a=blob;f=hw/misc/sifive_test.c)
 
 ## License
 
