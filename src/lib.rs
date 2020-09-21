@@ -18,9 +18,10 @@
 //!
 //! Exit the QEMU session from anywhere in your code:
 //! ```
-//! qemu_exit::aarch64::exit_success() // QEMU binary executes `exit(0)`.
-//! qemu_exit::aarch64::exit_failure() // QEMU binary executes `exit(1)`.
-//! qemu_exit::aarch64::exit(arg)      // Use a custom code. Argument must implement `Into<u64>`.
+//! let qemu_exit = qemu_exit::AArch64::new();
+//! qemu_exit.exit_success() // QEMU binary executes `exit(0)`.
+//! qemu_exit.exit_failure() // QEMU binary executes `exit(1)`.
+//! qemu_exit.exit(code)      // Use a custom code. Argument must implement `Into<u64>`.
 //! ```
 //!
 //! # RISCV64
@@ -31,9 +32,10 @@
 //!
 //! Exit the QEMU session from anywhere in your code:
 //! ```
-//! qemu_exit::riscv64::exit_success() // QEMU binary executes `exit(0)`.
-//! qemu_exit::riscv64::exit_failure() // QEMU binary executes `exit(1)`.
-//! qemu_exit::riscv64::exit(arg)      // Use a custom code. Argument must implement `Into<u64>`.
+//! let qemu_exit = qemu_exit::Riscv64::new(addr) // Where addr is the address of sifive_test device.
+//! qemu_exit.exit_success() // QEMU binary executes `exit(0)`.
+//! qemu_exit.exit_failure() // QEMU binary executes `exit(1)`.
+//! qemu_exit.exit(code)      // Use a custom code. Argument must implement `Into<u64>`.
 //! ```
 //!
 //! # x86_64
@@ -47,7 +49,8 @@
 //!
 //! Iobase is configurable and used as a `const generic`:
 //! ```
-//! qemu_exit::x86::exit<{ 0xf4 }>(arg) // Use a custom code. Argument must implement `Into<u32>`.
+//! let qemu_exit = qemu_exit::x86::X86::new(io_port) // Where io_port is the port of isa-debug-exit
+//! qemu_exit.exit(code) // Use a custom code. Argument must implement `Into<u32>`.
 //! ```
 //! ### Note
 //!
@@ -87,7 +90,7 @@ pub use host_stubs::*;
 pub trait QemuExit {
     /// Exit qemu with @code
     fn exit<T: Into<u32>>(&self, code: T) -> !;
-    /// Exit qemue with success code
+    /// Exit qemu with success code
     fn exit_success(&self) -> ! {
         unimplemented!()
     }
