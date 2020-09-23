@@ -1,6 +1,6 @@
 [package]
 name = "qemu-exit"
-version = "0.1.3"
+version = "0.1.4"
 authors = ["Andre Richter <andre.o.richter@gmail.com>"]
 description = "Exit QEMU with user-defined code"
 homepage = "https://github.com/andre-richter/qemu-exit"
@@ -18,4 +18,4 @@ exclude = [
 ]
 
 [target.'cfg(target_arch = "x86_64")'.dependencies]
-x86_64 = "0.11.4"
+x86_64 = "0.11.7"
