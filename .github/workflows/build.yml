@@ -1,0 +1,44 @@
+name: build
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        target: [aarch64-unknown-none-softfloat, riscv64gc-unknown-none-elf, x86_64-unknown-linux-gnu]
+    steps:
+      - name: Rust setup
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          override: true
+          target: ${{ matrix.target }}
+          components: rustfmt
+
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Cargo fmt
+        uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: -- --check
+
+      - name: Cargo check
+        uses: actions-rs/cargo@v1
+        with:
+          command: check
+          args: --target ${{ matrix.target }}
+
+      - name: Cargo build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --target ${{ matrix.target }}
