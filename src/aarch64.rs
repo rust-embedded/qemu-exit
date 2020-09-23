@@ -4,11 +4,13 @@
 
 //! AArch64 QEMU exit.
 
+use crate::QemuExit;
+
 /// QEMU exit code 0.
-pub const EXIT_SUCCESS: u64 = 0;
+pub const EXIT_SUCCESS: u32 = 0;
 
 /// QEMU exit code 1.
-pub const EXIT_FAILURE: u64 = 1;
+pub const EXIT_FAILURE: u32 = 1;
 
 #[allow(non_upper_case_globals)]
 const ADP_Stopped_ApplicationExit: u64 = 0x20026;
@@ -19,6 +21,9 @@ struct qemu_parameter_block {
     arg0: u64,
     arg1: u64,
 }
+
+/// AArch64 QemuExit info struct
+pub struct AArch64 {}
 
 /// A Semihosting call using `0x18` - `SYS_EXIT`.
 ///
@@ -45,25 +50,31 @@ fn semihosting_sys_exit_call(block: &qemu_parameter_block) -> ! {
     loop {}
 }
 
-/// QEMU binary executes `exit(arg)`.
-pub fn exit<T>(code: T) -> !
-where
-    T: Into<u64>,
-{
-    let block = qemu_parameter_block {
-        arg0: ADP_Stopped_ApplicationExit,
-        arg1: code.into(),
-    };
-
-    semihosting_sys_exit_call(&block)
+impl AArch64 {
+    /// Create a new AArch64 QemuExit struct
+    pub fn new() -> Self {
+        AArch64 {}
+    }
 }
 
-/// QEMU binary executes `exit(0)`.
-pub fn exit_success() -> ! {
-    exit(EXIT_SUCCESS)
-}
+impl QemuExit for AArch64 {
+    /// QEMU binary executes `exit(arg)`.
+    fn exit<T: Into<u32>>(&self, code: T) -> ! {
+        let block = qemu_parameter_block {
+            arg0: ADP_Stopped_ApplicationExit,
+            arg1: code.into() as u64,
+        };
 
-/// QEMU binary executes `exit(1)`.
-pub fn exit_failure() -> ! {
-    exit(EXIT_FAILURE)
+        semihosting_sys_exit_call(&block)
+    }
+
+    /// QEMU binary executes `exit(0)`.
+    fn exit_success(&self) -> ! {
+        self.exit(EXIT_SUCCESS)
+    }
+
+    /// QEMU binary executes `exit(1)`.
+    fn exit_failure(&self) -> ! {
+        self.exit(EXIT_FAILURE)
+    }
 }

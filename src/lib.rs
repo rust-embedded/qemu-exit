@@ -18,9 +18,10 @@
 //!
 //! Exit the QEMU session from anywhere in your code:
 //! ```
-//! qemu_exit::aarch64::exit_success() // QEMU binary executes `exit(0)`.
-//! qemu_exit::aarch64::exit_failure() // QEMU binary executes `exit(1)`.
-//! qemu_exit::aarch64::exit(arg)      // Use a custom code. Argument must implement `Into<u64>`.
+//! let qemu_exit = qemu_exit::AArch64::new();
+//! qemu_exit.exit_success() // QEMU binary executes `exit(0)`.
+//! qemu_exit.exit_failure() // QEMU binary executes `exit(1)`.
+//! qemu_exit.exit(code)      // Use a custom code. Argument must implement `Into<u64>`.
 //! ```
 //!
 //! # RISCV64
@@ -31,9 +32,10 @@
 //!
 //! Exit the QEMU session from anywhere in your code:
 //! ```
-//! qemu_exit::riscv64::exit_success() // QEMU binary executes `exit(0)`.
-//! qemu_exit::riscv64::exit_failure() // QEMU binary executes `exit(1)`.
-//! qemu_exit::riscv64::exit(arg)      // Use a custom code. Argument must implement `Into<u64>`.
+//! let qemu_exit = qemu_exit::Riscv64::new(addr) // Where addr is the address of sifive_test device.
+//! qemu_exit.exit_success() // QEMU binary executes `exit(0)`.
+//! qemu_exit.exit_failure() // QEMU binary executes `exit(1)`.
+//! qemu_exit.exit(code)      // Use a custom code. Argument must implement `Into<u64>`.
 //! ```
 //!
 //! # x86_64
@@ -47,7 +49,8 @@
 //!
 //! Iobase is configurable and used as a `const generic`:
 //! ```
-//! qemu_exit::x86::exit<{ 0xf4 }>(arg) // Use a custom code. Argument must implement `Into<u32>`.
+//! let qemu_exit = qemu_exit::x86::X86::new(io_port) // Where io_port is the port of isa-debug-exit
+//! qemu_exit.exit(code) // Use a custom code. Argument must implement `Into<u32>`.
 //! ```
 //! ### Note
 //!
@@ -58,7 +61,7 @@
 //!
 //!  - [Semihosting for AArch32 and AArch64](https://static.docs.arm.com/dui0003/b/semihosting.pdf)
 //!  - [QEMU isa-debug-exit source](https://git.qemu.org/?p=qemu.git;a=blob;f=hw/misc/debugexit.c)
-//!  - [QEMU sifive_test source](https://git.qemu.org/?p=qemu.git;a=blob_plain;f=hw/riscv/sifive_test.c;hb=HEAD)
+//!  - [QEMU sifive_test source](https://git.qemu.org/?p=qemu.git;a=blob;f=hw/misc/sifive_test.c)
 
 #![allow(incomplete_features)]
 #![deny(missing_docs)]
@@ -76,3 +79,17 @@ pub mod riscv64;
 
 #[cfg(target_arch = "x86_64")]
 pub mod x86;
+
+/// QemuExit interface
+pub trait QemuExit {
+    /// Exit qemu with @code
+    fn exit<T: Into<u32>>(&self, code: T) -> !;
+    /// Exit qemu with success code
+    fn exit_success(&self) -> ! {
+        unimplemented!()
+    }
+    /// Exit qemue with failure code
+    fn exit_failure(&self) -> ! {
+        unimplemented!()
+    }
+}
