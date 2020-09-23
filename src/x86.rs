@@ -2,49 +2,50 @@
 //
 // Copyright (c) 2019-2020 Andre Richter <andre.o.richter@gmail.com>
 
-//! x86_64 QEMU exit.
+//! x86.
 
-use crate::QemuExit;
+use crate::QEMUExit;
 
-/// QEMU exit code 1
-pub const EXIT_FAILURE: u32 = 0; // as ((0 << 1) | 1) = 1
+const EXIT_FAILURE: u32 = 0; // since ((0 << 1) | 1) = 1.
 
-/// X86 QemuExit info struct
+/// x86 configuration.
 pub struct X86 {
-    /// Port number of the isa-debug-exit device
+    /// Port number of the isa-debug-exit device.
     io_port: u16,
-    /// As QEMU cannot exit(0), chose a value that represent succes code. It must be ood
-    exit_success: u32,
+    /// Since QEMU's isa-debug-exit cannot exit(0), choose a value that represents success for you.
+    ///
+    /// Note: Only odd values will work.
+    custom_exit_success: u32,
 }
 
 impl X86 {
-    /// Create a new X86 QemuExit struct
-    pub fn new<T: Into<u16>, U: Into<u32>>(io_port: T, exit_success: U) -> Self {
+    /// Create an instance.
+    pub const fn new(io_port: u16, custom_exit_success: u32) -> Self {
+        assert!((custom_exit_success & 1) == 1);
+
         X86 {
-            io_port: io_port.into(),
-            exit_success: exit_success.into(),
+            io_port,
+            custom_exit_success,
         }
     }
 }
 
-impl QemuExit for X86 {
-    /// QEMU binary executes `exit((code << 1) | 1)`.
-    fn exit<T: Into<u32>>(&self, code: T) -> ! {
+impl QEMUExit for X86 {
+    fn exit(&self, code: u32) -> ! {
         use x86_64::instructions::port::Port;
 
-        let mut port = Port::new(self.io_port);
-        unsafe { port.write(code.into()) };
+        let mut port = Port::<u32>::new(self.io_port);
+        unsafe { port.write(code.into()) }; // QEMU will execute `exit(((code << 1) | 1))`.
 
         // For the case that the QEMU exit attempt did not work, transition into an infinite loop.
         // Calling `panic!()` here is unfeasible, since there is a good chance this function here is
-        // the last expression in the `panic!()` handler itself. This prevents a possible
-        // infinite loop.
+        // the last expression in the `panic!()` handler itself. This prevents a possible infinite
+        // loop.
         loop {}
     }
 
     fn exit_success(&self) -> ! {
-        let code = self.exit_success >> 1; // Shift because QEMU does ((code << 1) | 1)
-        self.exit(code)
+        self.exit(self.custom_exit_success >> 1) // Shift because QEMU does ((code << 1) | 1).
     }
 
     fn exit_failure(&self) -> ! {

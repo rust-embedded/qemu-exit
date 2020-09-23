@@ -7,89 +7,103 @@
 //! Quit a running QEMU session with user-defined exit code. Useful for unit or integration tests
 //! using QEMU.
 //!
-//! # AArch64
+//! ## TL;DR
+//!
+//! ```rust
+//! use qemu_exit::QEMUExit;
+//!
+//! #[cfg(target_arch = "aarch64")]
+//! let qemu_exit_handle = qemu_exit::AArch64::new();
+//!
+//! // addr: The address of sifive_test device.
+//! #[cfg(target_arch = "riscv64")]
+//! let qemu_exit_handle = qemu_exit::RISCV64::new(addr);
+//!
+//! // io_port:             Port of isa-debug-exit.
+//! // custom_exit_success: A custom success code; Must be an odd number.
+//! #[cfg(target_arch = "x86_64")]
+//! let qemu_exit_handle = qemu_exit::X86::new(io_port, custom_exit_success);
+//!
+//! qemu_exit_handle.exit(1337);
+//! qemu_exit_handle.exit_success();
+//! qemu_exit_handle.exit_failure();
+//! ```
+//!
+//! ## Architecture Specific Configuration
+//!
+//! ### AArch64
 //!
 //! Pass the `-semihosting` argument to QEMU invocation, e.g.:
 //! ```
 //! qemu-system-aarch64 -M raspi3 -serial stdio -semihosting -kernel kernel8.img
 //! ```
 //!
-//! ## Examples
+//! ### RISCV64
 //!
-//! Exit the QEMU session from anywhere in your code:
-//! ```
-//! let qemu_exit = qemu_exit::AArch64::new();
-//! qemu_exit.exit_success() // QEMU binary executes `exit(0)`.
-//! qemu_exit.exit_failure() // QEMU binary executes `exit(1)`.
-//! qemu_exit.exit(code)      // Use a custom code. Argument must implement `Into<u64>`.
-//! ```
+//! You need to chose a machine with the `sifive_test` device, for exemple `-M virt`.
 //!
-//! # RISCV64
-//!
-//! You need to chose a machine with the sifive_test device, for exemple ``-M virt``
-//!
-//! ## Examples
-//!
-//! Exit the QEMU session from anywhere in your code:
-//! ```
-//! let qemu_exit = qemu_exit::Riscv64::new(addr) // Where addr is the address of sifive_test device.
-//! qemu_exit.exit_success() // QEMU binary executes `exit(0)`.
-//! qemu_exit.exit_failure() // QEMU binary executes `exit(1)`.
-//! qemu_exit.exit(code)      // Use a custom code. Argument must implement `Into<u64>`.
-//! ```
-//!
-//! # x86_64
+//! ### x86_64
 //!
 //! Add the special ISA debug exit device by passing the flags:
 //! ```
 //! -device isa-debug-exit,iobase=0xf4,iosize=0x04
 //! ```
 //!
-//! ## Examples
+//! When instantiating the handle, `iobase` must be given as the first parameter.
 //!
-//! Iobase is configurable and used as a `const generic`:
-//! ```
-//! let qemu_exit = qemu_exit::x86::X86::new(io_port) // Where io_port is the port of isa-debug-exit
-//! qemu_exit.exit(code) // Use a custom code. Argument must implement `Into<u32>`.
-//! ```
-//! ### Note
-//!
-//! The QEMU binary will execute `exit((arg << 1) | 1)`. The is hardcoded in the QEMU sources.
+//! The second parameter must be an `EXIT_SUCCESS` code of your choice. This is needed because the
+//! QEMU binary will execute `exit((arg << 1) | 1)`. This is hardcoded in the QEMU sources.
 //! Therefore, with `isa-debug-exit`, it is not possible to let QEMU invoke `exit(0)`.
 //!
-//! # Literature
+//! ```rust
+//! let qemu_exit_handle = qemu_exit::X86::new(io_port, custom_exit_success);
+//! ```
 //!
-//!  - [Semihosting for AArch32 and AArch64](https://static.docs.arm.com/dui0003/b/semihosting.pdf)
-//!  - [QEMU isa-debug-exit source](https://git.qemu.org/?p=qemu.git;a=blob;f=hw/misc/debugexit.c)
-//!  - [QEMU sifive_test source](https://git.qemu.org/?p=qemu.git;a=blob;f=hw/misc/sifive_test.c)
+//! ## Literature
+//!
+//! - [Semihosting for AArch32 and AArch64](https://static.docs.arm.com/dui0003/b/semihosting.pdf)
+//! - [QEMU isa-debug-exit source](https://git.qemu.org/?p=qemu.git;a=blob;f=hw/misc/debugexit.c)
+//! - [QEMU sifive_test source](https://git.qemu.org/?p=qemu.git;a=blob;f=hw/misc/sifive_test.c)
 
 #![allow(incomplete_features)]
 #![deny(missing_docs)]
-#![feature(const_generics)]
+#![feature(asm)]
+#![feature(const_fn)]
+#![feature(const_panic)]
 #![feature(core_intrinsics)]
 #![feature(llvm_asm)]
-#![feature(asm)]
 #![no_std]
 
 #[cfg(target_arch = "aarch64")]
 pub mod aarch64;
 
+#[cfg(target_arch = "aarch64")]
+pub use aarch64::*;
+
 #[cfg(target_arch = "riscv64")]
 pub mod riscv64;
+
+#[cfg(target_arch = "riscv64")]
+pub use riscv64::*;
 
 #[cfg(target_arch = "x86_64")]
 pub mod x86;
 
-/// QemuExit interface
-pub trait QemuExit {
-    /// Exit qemu with @code
-    fn exit<T: Into<u32>>(&self, code: T) -> !;
-    /// Exit qemu with success code
-    fn exit_success(&self) -> ! {
-        unimplemented!()
-    }
-    /// Exit qemue with failure code
-    fn exit_failure(&self) -> ! {
-        unimplemented!()
-    }
+#[cfg(target_arch = "x86_64")]
+pub use x86::*;
+
+/// Generic interface for exiting QEMU.
+pub trait QEMUExit {
+    /// Exit with specified return code.
+    ///
+    /// Note: For `X86`, code is modified inside QEMU using the formula `((code << 1) | 1)`.
+    fn exit(&self, code: u32) -> !;
+
+    /// Exit QEMU using `EXIT_SUCCESS`, aka `0`, if possible.
+    ///
+    /// Note: Not possible for `X86`.
+    fn exit_success(&self) -> !;
+
+    /// Exit QEMU using `EXIT_FAILURE`, aka `1`.
+    fn exit_failure(&self) -> !;
 }

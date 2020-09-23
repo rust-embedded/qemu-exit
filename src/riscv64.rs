@@ -1,51 +1,44 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 //
-// Copyright (c) 2019-2020 Andre Richter <estblcsk@gmail.com>
-//
+// Copyright (c) 2020 Esteban Blanc <estblcsk@gmail.com>
 
-//! riscv64 QEMU exit.
+//! RISCV64.
 
-use crate::QemuExit;
+use crate::QEMUExit;
 
-/// QEMU exit code 0.
-pub const EXIT_SUCCESS: u32 = 0x5555;
+const EXIT_SUCCESS: u32 = 0x5555; // Equals `exit(0)`.
 
-/// QEMU failure flag.
-pub const EXIT_FAILURE_FLAG: u32 = 0x3333;
+const EXIT_FAILURE_FLAG: u32 = 0x3333;
+const EXIT_FAILURE: u32 = exit_code_encode(1); // Equals `exit(1)`.
+const EXIT_RESET: u32 = 0x7777;
 
-/// QEMU exit code 1.
-pub const EXIT_FAILURE: u32 = (0x1 << 16) | EXIT_FAILURE_FLAG;
-
-/// QEMU reset.
-pub const EXIT_RESET: u32 = 0x7777;
-
-/// Riscv64 QemuExit info struct
-pub struct Riscv64 {
-    /// Address of the sifive_test mapped device
+/// RISCV64 configuration
+pub struct RISCV64 {
+    /// Address of the sifive_test mapped device.
     addr: u64,
 }
 
-/// Encode the exit code using EXIT_FAILURE_FLAG
-fn exit_code_encode(code: u32) -> u32 {
+/// Encode the exit code using EXIT_FAILURE_FLAG.
+const fn exit_code_encode(code: u32) -> u32 {
     (code << 16) | EXIT_FAILURE_FLAG
 }
 
-impl Riscv64 {
-    /// Create a new Riscv64 QemuExit struct
-    pub fn new<T: Into<u64>>(addr: u64) -> Self {
-        Riscv64 { addr: addr.into() }
+impl RISCV64 {
+    /// Create an instance.
+    pub const fn new(addr: u64) -> Self {
+        RISCV64 { addr }
     }
 }
 
-impl QemuExit for Riscv64 {
+impl QEMUExit for RISCV64 {
     /// Exit qemu with specified exit code.
-    fn exit<T: Into<u32>>(&self, code: T) -> ! {
-        let mut code = code.into();
-
+    fn exit(&self, code: u32) -> ! {
         // If code is not a special value, we need to encode it with EXIT_FAILURE_FLAG.
-        if code != EXIT_SUCCESS && code != EXIT_FAILURE && code != EXIT_RESET {
-            code = exit_code_encode(code);
-        }
+        let code = if code != EXIT_SUCCESS && code != EXIT_FAILURE && code != EXIT_RESET {
+            exit_code_encode(code)
+        } else {
+            code
+        };
 
         unsafe {
             asm!(
@@ -56,18 +49,15 @@ impl QemuExit for Riscv64 {
 
         loop {
             unsafe {
-                // No need to bussy loop so wait for interrupt
                 asm!("wfi");
             }
         }
     }
 
-    /// QEMU exit with exit code 0
     fn exit_success(&self) -> ! {
         self.exit(EXIT_SUCCESS);
     }
 
-    /// QEMU exit with exit code 1
     fn exit_failure(&self) -> ! {
         self.exit(EXIT_FAILURE);
     }

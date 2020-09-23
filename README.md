@@ -8,53 +8,57 @@ Exit QEMU with user-defined code.
 Quit a running QEMU session with user-defined exit code. Useful for unit or integration tests using
 QEMU.
 
-# AArch64
+## TL;DR
+
+```rust
+use qemu_exit::QEMUExit;
+
+#[cfg(target_arch = "aarch64")]
+let qemu_exit_handle = qemu_exit::AArch64::new();
+
+// addr: The address of sifive_test device.
+#[cfg(target_arch = "riscv64")]
+let qemu_exit_handle = qemu_exit::RISCV64::new(addr);
+
+// io_port:             Port of isa-debug-exit.
+// custom_exit_success: A custom success code; Must be an odd number.
+#[cfg(target_arch = "x86_64")]
+let qemu_exit_handle = qemu_exit::X86::new(io_port, custom_exit_success);
+
+qemu_exit_handle.exit(1337);
+qemu_exit_handle.exit_success();
+qemu_exit_handle.exit_failure();
+```
+
+## Architecture Specific Configuration
+
+### AArch64
 
 Pass the `-semihosting` argument to QEMU invocation, e.g.:
 ```
 qemu-system-aarch64 -M raspi3 -serial stdio -semihosting -kernel kernel8.img
 ```
 
-## Examples
+### RISCV64
 
-Exit the QEMU session from anywhere in your code:
-```rust
-qemu_exit::aarch64::exit_success() // QEMU binary executes `exit(0)`.
-qemu_exit::aarch64::exit_failure() // QEMU binary executes `exit(1)`.
-qemu_exit::aarch64::exit(arg)      // Use a custom code. Argument must implement `Into<u64>`.
-```
-# RISCV64
+You need to chose a machine with the `sifive_test` device, for exemple `-M virt`.
 
-You need to chose a machine with the sifive_test device, for exemple ``-M virt``
-
-## Examples
-
-Exit the QEMU session from anywhere in your code:
-```rust
-qemu_exit::riscv64::exit_success() // QEMU binary executes `exit(0)`.
-qemu_exit::riscv64::exit_failure() // QEMU binary executes `exit(1)`.
-qemu_exit::riscv64::exit(arg)      // Use a custom code. Argument must implement `Into<u64>`.
-```
-
-# x86_64
+### x86_64
 
 Add the special ISA debug exit device by passing the flags:
 ```
 -device isa-debug-exit,iobase=0xf4,iosize=0x04
 ```
 
-## Examples
+When instantiating the handle, `iobase` must be given as the first parameter.
 
-The iobase is given as a `const generic`:
+The second parameter must be an `EXIT_SUCCESS` code of your choice. This is needed because the QEMU
+binary will execute `exit((arg << 1) | 1)`. This is hardcoded in the QEMU sources. Therefore, with
+`isa-debug-exit`, it is not possible to let QEMU invoke `exit(0)`.
+
 ```rust
-qemu_exit::x86::exit<{ 0xf4 }>(arg) // Use a custom code. Argument must implement `Into<u32>`.
+let qemu_exit_handle = qemu_exit::X86::new(io_port, custom_exit_success);
 ```
-
-### Note
-
-The QEMU binary will execute `exit((arg << 1) | 1)`. This is hardcoded in the
-QEMU sources. Therefore, with `isa-debug-exit`, it is not possible to let QEMU
-invoke `exit(0)`.
 
 ## Literature
 
