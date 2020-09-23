@@ -16,14 +16,14 @@ use qemu_exit::QEMUExit;
 #[cfg(target_arch = "aarch64")]
 let qemu_exit_handle = qemu_exit::AArch64::new();
 
-// addr: The address of sifive_test device.
+// addr: The address of sifive_test.
 #[cfg(target_arch = "riscv64")]
 let qemu_exit_handle = qemu_exit::RISCV64::new(addr);
 
-// io_port:             Port of isa-debug-exit.
+// io_base:             I/O-base of isa-debug-exit.
 // custom_exit_success: A custom success code; Must be an odd number.
 #[cfg(target_arch = "x86_64")]
-let qemu_exit_handle = qemu_exit::X86::new(io_port, custom_exit_success);
+let qemu_exit_handle = qemu_exit::X86::new(io_base, custom_exit_success);
 
 qemu_exit_handle.exit(1337);
 qemu_exit_handle.exit_success();
