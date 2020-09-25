@@ -19,7 +19,7 @@ pub struct X86 {
 }
 
 /// Output a long on an io port
-pub fn outl(io_base: u16, code: u32) {
+fn outl(io_base: u16, code: u32) {
     unsafe {
         llvm_asm!("outl %eax, %dx" :: "{dx}"(io_base), "{eax}"(code) :: "volatile");
         // asm!("outl dx, eax", in("dx")io_base, in("eax")code); I don't know why this is not
