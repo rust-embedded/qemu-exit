@@ -51,12 +51,13 @@
 //!
 //! When instantiating the handle, `iobase` must be given as the first parameter.
 //!
-//! The second parameter must be an `EXIT_SUCCESS` code of your choice. This is needed because the
-//! QEMU binary will execute `exit((arg << 1) | 1)`. This is hardcoded in the QEMU sources.
-//! Therefore, with `isa-debug-exit`, it is not possible to let QEMU invoke `exit(0)`.
+//! The second parameter must be an `EXIT_SUCCESS` code of your choice that is an odd number, aka
+//! bit number zero must be `1`. This is needed because in QEMU, the provided code is internally
+//! binary-OR'ed with `0x1`. This is hardcoded and therefore, with `isa-debug-exit`, it is not
+//! possible to let QEMU invoke `exit(0)`.
 //!
 //! ```rust
-//! let qemu_exit_handle = qemu_exit::X86::new(io_port, custom_exit_success);
+//! let qemu_exit_handle = qemu_exit::X86::new(io_base, custom_exit_success);
 //! ```
 //!
 //! ## Literature
