@@ -18,6 +18,15 @@ pub struct X86 {
     custom_exit_success: u32,
 }
 
+/// Output a long on an io port
+pub fn outl(io_base: u16, code: u32) {
+    unsafe {
+        llvm_asm!("outl %eax, %dx" :: "{dx}"(io_base), "{eax}"(code) :: "volatile");
+        // asm!("outl dx, eax", in("dx")io_base, in("eax")code); I don't know why this is not
+        // working
+    }
+}
+
 impl X86 {
     /// Create an instance.
     pub const fn new(io_base: u16, custom_exit_success: u32) -> Self {
@@ -32,15 +41,12 @@ impl X86 {
 
 impl QEMUExit for X86 {
     fn exit(&self, code: u32) -> ! {
-        use x86_64::instructions::port::Port;
+        outl(self.io_base, code); // QEMU will execute `exit(((code << 1) | 1))`.
 
-        let mut port = Port::<u32>::new(self.io_base);
-        unsafe { port.write(code.into()) }; // QEMU will execute `exit(((code << 1) | 1))`.
-
-        // For the case that the QEMU exit attempt did not work, transition into an infinite loop.
-        // Calling `panic!()` here is unfeasible, since there is a good chance this function here is
-        // the last expression in the `panic!()` handler itself. This prevents a possible infinite
-        // loop.
+        // For the case that the QEMU exit attempt did not work, transition into an infinite
+        // loop. Calling `panic!()` here is unfeasible, since there is a good
+        // chance this function here is the last expression in the `panic!()`
+        // handler itself. This prevents a possible infinite loop.
         loop {}
     }
 
