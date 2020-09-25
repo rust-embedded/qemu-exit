@@ -21,9 +21,7 @@ pub struct X86 {
 /// Output a long on an io port
 fn outl(io_base: u16, code: u32) {
     unsafe {
-        llvm_asm!("outl %eax, %dx" :: "{dx}"(io_base), "{eax}"(code) :: "volatile");
-        // asm!("outl dx, eax", in("dx")io_base, in("eax")code); I don't know why this is not
-        // working
+        asm!("out dx, eax", in("dx")io_base, in("eax")code);
     }
 }
 
@@ -43,10 +41,10 @@ impl QEMUExit for X86 {
     fn exit(&self, code: u32) -> ! {
         outl(self.io_base, code); // QEMU will execute `exit(((code << 1) | 1))`.
 
-        // For the case that the QEMU exit attempt did not work, transition into an infinite
-        // loop. Calling `panic!()` here is unfeasible, since there is a good
-        // chance this function here is the last expression in the `panic!()`
-        // handler itself. This prevents a possible infinite loop.
+        // For the case that the QEMU exit attempt did not work, transition into an infinite loop.
+        // Calling `panic!()` here is unfeasible, since there is a good chance this function here is
+        // the last expression in the `panic!()` handler itself. This prevents a possible infinite
+        // loop.
         loop {}
     }
 
