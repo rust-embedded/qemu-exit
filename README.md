@@ -42,7 +42,10 @@ qemu-system-aarch64 -M raspi3 -serial stdio -semihosting -kernel kernel8.img
 
 ### RISCV64
 
-You need to chose a machine with the `sifive_test` device, for exemple `-M virt`.
+You need to chose a machine with the `sifive_test` device, for exemple `-M virt`:
+```
+qemu-system-riscv64 -M virt -nographic -monitor none -serial stdio -kernel kernel.elf
+```
 
 ### x86_64
 
