@@ -18,6 +18,13 @@ pub struct X86 {
     custom_exit_success: u32,
 }
 
+/// Output a long on an io port
+fn outl(io_base: u16, code: u32) {
+    unsafe {
+        asm!("out dx, eax", in("dx")io_base, in("eax")code);
+    }
+}
+
 impl X86 {
     /// Create an instance.
     pub const fn new(io_base: u16, custom_exit_success: u32) -> Self {
@@ -32,10 +39,7 @@ impl X86 {
 
 impl QEMUExit for X86 {
     fn exit(&self, code: u32) -> ! {
-        use x86_64::instructions::port::Port;
-
-        let mut port = Port::<u32>::new(self.io_base);
-        unsafe { port.write(code.into()) }; // QEMU will execute `exit(((code << 1) | 1))`.
+        outl(self.io_base, code); // QEMU will execute `exit(((code << 1) | 1))`.
 
         // For the case that the QEMU exit attempt did not work, transition into an infinite loop.
         // Calling `panic!()` here is unfeasible, since there is a good chance this function here is
