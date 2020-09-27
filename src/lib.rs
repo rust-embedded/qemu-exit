@@ -66,13 +66,10 @@
 //! - [QEMU isa-debug-exit source](https://git.qemu.org/?p=qemu.git;a=blob;f=hw/misc/debugexit.c)
 //! - [QEMU sifive_test source](https://git.qemu.org/?p=qemu.git;a=blob;f=hw/misc/sifive_test.c)
 
-#![allow(incomplete_features)]
 #![deny(missing_docs)]
 #![feature(asm)]
 #![feature(const_fn)]
 #![feature(const_panic)]
-#![feature(core_intrinsics)]
-#![feature(llvm_asm)]
 #![no_std]
 
 #[cfg(target_arch = "aarch64")]
@@ -97,7 +94,7 @@ pub use x86::*;
 pub trait QEMUExit {
     /// Exit with specified return code.
     ///
-    /// Note: For `X86`, code is modified inside QEMU using the formula `((code << 1) | 1)`.
+    /// Note: For `X86`, code is binary-OR'ed with `0x1` inside QEMU.
     fn exit(&self, code: u32) -> !;
 
     /// Exit QEMU using `EXIT_SUCCESS`, aka `0`, if possible.

@@ -30,14 +30,11 @@ pub struct AArch64 {}
 /// If first paraemter != `ADP_Stopped_ApplicationExit`, exit code `1` is used.
 fn semihosting_sys_exit_call(block: &qemu_parameter_block) -> ! {
     unsafe {
-        llvm_asm!(
-            "mov w0, 0x18
-             mov x1, $0
-             hlt #0xF000"
-             : // No Outputs
-             : "r"(block as *const _ as u64)
-             : "w0", "x1", "memory"
-             : "volatile"
+        asm!(
+            "hlt #0xF000",
+            in("x0") 0x18,
+            in("x1") block as *const _ as u64,
+            options(nostack)
         );
     }
 

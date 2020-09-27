@@ -21,7 +21,12 @@ pub struct X86 {
 /// Output a long on an io port
 fn outl(io_base: u16, code: u32) {
     unsafe {
-        asm!("out dx, eax", in("dx")io_base, in("eax")code);
+        asm!(
+            "out dx, eax",
+            in("dx") io_base,
+            in("eax") code,
+            options(nomem, nostack)
+        );
     }
 }
 
