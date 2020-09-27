@@ -1,4 +1,5 @@
-name: build
+name: Build
+
 on:
   pull_request:
     branches:
@@ -6,10 +7,14 @@ on:
   push:
     branches:
       - master
+  schedule:
+    - cron: "0 5 * * *"
 
 jobs:
   build:
+    name: Build Library
     runs-on: ubuntu-20.04
+
     strategy:
       matrix:
         target:

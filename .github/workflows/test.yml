@@ -1,0 +1,37 @@
+name: Test
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+  schedule:
+    - cron: "0 5 * * *"
+
+jobs:
+  build:
+    name: Test QEMU Exit
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Rust setup
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          override: true
+          target: aarch64-unknown-none-softfloat
+          components: llvm-tools-preview
+
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Install QEMU and binutils
+        run: |
+          sudo apt install qemu-system-arm
+          cargo install cargo-binutils
+
+      - name: Run tests
+        run: |
+          RUSTFLAGS="-C link-arg=-Ttests/aarch64_raspi3/link.ld" cargo test --target aarch64-unknown-none-softfloat --release
