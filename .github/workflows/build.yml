@@ -12,7 +12,8 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        target: [aarch64-unknown-none-softfloat, riscv64gc-unknown-none-elf, x86_64-unknown-linux-gnu]
+        target:
+          [aarch64-unknown-none-softfloat, riscv64gc-unknown-none-elf, x86_64-unknown-linux-gnu]
     steps:
       - name: Rust setup
         uses: actions-rs/toolchain@v1
