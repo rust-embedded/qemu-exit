@@ -1,7 +1,7 @@
 [![crates.io](https://img.shields.io/crates/d/qemu-exit.svg)](https://crates.io/crates/qemu-exit)
 [![crates.io](https://img.shields.io/crates/v/qemu-exit.svg)](https://crates.io/crates/qemu-exit)
 ![build](https://github.com/andre-richter/qemu-exit/workflows/build/badge.svg)
-![Test](https://github.com/andre-richter/qemu-exit/workflows/Test/badge.svg)
+![Test](https://github.com/andre-richter/qemu-exit/workflows/test/badge.svg)
 
 # qemu-exit
 
