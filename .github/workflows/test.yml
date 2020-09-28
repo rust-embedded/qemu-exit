@@ -15,13 +15,18 @@ jobs:
     name: Test QEMU Exit
     runs-on: ubuntu-20.04
 
+    strategy:
+      matrix:
+        target:
+          [aarch64-unknown-none-softfloat, riscv64gc-unknown-none-elf]
+
     steps:
       - name: Rust setup
         uses: actions-rs/toolchain@v1
         with:
           toolchain: nightly
           override: true
-          target: aarch64-unknown-none-softfloat
+          target: ${{ matrix.target }}
           components: llvm-tools-preview
 
       - name: Check out repository
@@ -29,9 +34,15 @@ jobs:
 
       - name: Install QEMU and binutils
         run: |
-          sudo apt install qemu-system-arm
+          sudo apt install qemu-system opensbi
           cargo install cargo-binutils
 
-      - name: Run tests
+      - name: Run tests AARCH64
+        if: matrix.target == 'aarch64-unknown-none-softfloat'
         run: |
-          RUSTFLAGS="-C link-arg=-Ttests/aarch64_raspi3/link.ld" cargo test --target aarch64-unknown-none-softfloat --release
+          RUSTFLAGS="-C link-arg=-Ttests/aarch64_raspi3/link.ld" cargo test --target ${{ matrix.target }} --release
+
+      - name: Run tests RISCV64
+        if: matrix.target == 'riscv64gc-unknown-none-elf'
+        run: |
+          RUSTFLAGS="-C link-arg=-Ttests/riscv64_virt/link.ld" cargo test --target ${{ matrix.target }} --release
