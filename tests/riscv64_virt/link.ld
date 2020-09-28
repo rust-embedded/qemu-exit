@@ -7,7 +7,7 @@ ENTRY(_start)
 
 SECTIONS
 {
-    /* Set current address to the address where where Opensbi will jump */
+    /* Set current address to the address where OpenSBI will jump */
     . = 0x80200000;
 
     .text : {

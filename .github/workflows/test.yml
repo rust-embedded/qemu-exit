@@ -34,7 +34,7 @@ jobs:
 
       - name: Install QEMU and binutils
         run: |
-          sudo apt install qemu-system opensbi
+          sudo apt install qemu-system
           cargo install cargo-binutils
 
       - name: Run tests AARCH64
