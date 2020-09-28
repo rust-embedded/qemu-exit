@@ -17,7 +17,7 @@ use qemu_exit::QEMUExit;
 //--------------------------------------------------------------------------------------------------
 
 #[cfg(target_arch = "aarch64")]
-pub const QEMU_EXIT_HANDLE: qemu_exit::AArch64 = qemu_exit::AArch64::new();
+const QEMU_EXIT_HANDLE: qemu_exit::AArch64 = qemu_exit::AArch64::new();
 
 #[cfg(target_arch = "aarch64")]
 mod aarch64_raspi3;
@@ -27,14 +27,14 @@ mod aarch64_raspi3;
 //--------------------------------------------------------------------------------------------------
 
 #[cfg(target_arch = "riscv64")]
-pub const QEMU_EXIT_HANDLE: qemu_exit::RISCV64 = qemu_exit::RISCV64::new(0x0);
+const QEMU_EXIT_HANDLE: qemu_exit::RISCV64 = qemu_exit::RISCV64::new(0x0);
 
 //--------------------------------------------------------------------------------------------------
 // x86
 //--------------------------------------------------------------------------------------------------
 
 #[cfg(target_arch = "x86_64")]
-pub const QEMU_EXIT_HANDLE: qemu_exit::X86 = qemu_exit::X86::new(0xf4, 5);
+const QEMU_EXIT_HANDLE: qemu_exit::X86 = qemu_exit::X86::new(0xf4, 5);
 
 //--------------------------------------------------------------------------------------------------
 // Generic code

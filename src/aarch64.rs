@@ -13,6 +13,11 @@ const EXIT_FAILURE: u32 = 1;
 const ADP_Stopped_ApplicationExit: u64 = 0x20026;
 
 /// The parameter block layout that is expected by QEMU.
+///
+/// If QEMU finds `ADP_Stopped_ApplicationExit` in the first parameter, it uses the second parameter
+/// as exit code.
+///
+/// If first paraemter != `ADP_Stopped_ApplicationExit`, exit code `1` is used.
 #[repr(C)]
 struct qemu_parameter_block {
     arg0: u64,
@@ -23,11 +28,6 @@ struct qemu_parameter_block {
 pub struct AArch64 {}
 
 /// A Semihosting call using `0x18` - `SYS_EXIT`.
-///
-/// If QEMU finds `ADP_Stopped_ApplicationExit` in the first parameter, it uses the second parameter
-/// as exit code.
-///
-/// If first paraemter != `ADP_Stopped_ApplicationExit`, exit code `1` is used.
 fn semihosting_sys_exit_call(block: &qemu_parameter_block) -> ! {
     unsafe {
         asm!(
