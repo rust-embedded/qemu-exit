@@ -31,7 +31,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v2
 
-      - name: Install QEMU and binutils
+      - name: Install QEMU
         run: |
           sudo apt install qemu-system
 

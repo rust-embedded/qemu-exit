@@ -2,7 +2,7 @@
 //
 // Copyright (c) 2019-2020 Esteban Blanc <estblcsk@gmail.com>
 
-//! Riscv64 specific setup code.
+//! RISCV64 specific setup code.
 
 #[no_mangle]
 unsafe extern "C" fn _start() -> ! {

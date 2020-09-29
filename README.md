@@ -72,18 +72,22 @@ let qemu_exit_handle = qemu_exit::X86::new(io_base, custom_exit_success);
 - [QEMU isa-debug-exit source](https://git.qemu.org/?p=qemu.git;a=blob;f=hw/misc/debugexit.c)
 - [QEMU sifive_test source](https://git.qemu.org/?p=qemu.git;a=blob;f=hw/misc/sifive_test.c)
 
+## Authors
+
+- [**@andre-richter** Andre Richter](https://github.com/andre-richter)
+- [**@Skallwar** Esteban Blanc](https://github.com/Skallwar)
+
 ## License
 
 Licensed under either of
 
-- Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE) or
-  http://www.apache.org/licenses/LICENSE-2.0)
+- Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE) or http://www.apache.org/licenses/LICENSE-2.0)
 - MIT License ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
 
 at your option.
 
-See the [third party notices file](THIRD_PARTY_NOTICES.md) for more information about third party
-project and their respective licenses
+See the [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for more information about utilized third
+party projects and their respective licenses.
 
 ### Contribution
 
