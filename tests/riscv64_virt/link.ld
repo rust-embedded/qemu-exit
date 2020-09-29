@@ -14,10 +14,7 @@ SECTIONS
         *(.text._start)
         *(.text)
     }
-    .data : { *(.data*) }
-    .sdata : { *(.sdata*) }
     .rodata : { *(.rodata*) }
-    .bss (NOLOAD) : { *(.bss*) }
 
     PROVIDE(_stack = . + 1M);
 }
