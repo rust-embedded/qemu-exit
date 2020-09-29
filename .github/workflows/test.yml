@@ -17,8 +17,7 @@ jobs:
 
     strategy:
       matrix:
-        target:
-          [aarch64-unknown-none-softfloat, riscv64gc-unknown-none-elf]
+        target: [aarch64-unknown-none-softfloat, riscv64gc-unknown-none-elf]
 
     steps:
       - name: Rust setup
@@ -35,11 +34,11 @@ jobs:
       - name: Install QEMU and binutils
         run: |
           sudo apt install qemu-system
-          cargo install cargo-binutils
 
       - name: Run tests AARCH64
         if: matrix.target == 'aarch64-unknown-none-softfloat'
         run: |
+          cargo install cargo-binutils
           RUSTFLAGS="-C link-arg=-Ttests/aarch64_raspi3/link.ld" cargo test --target ${{ matrix.target }} --release
 
       - name: Run tests RISCV64
