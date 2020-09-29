@@ -27,7 +27,10 @@ mod aarch64_raspi3;
 //--------------------------------------------------------------------------------------------------
 
 #[cfg(target_arch = "riscv64")]
-const QEMU_EXIT_HANDLE: qemu_exit::RISCV64 = qemu_exit::RISCV64::new(0x0);
+const QEMU_EXIT_HANDLE: qemu_exit::RISCV64 = qemu_exit::RISCV64::new(0x100000);
+
+#[cfg(target_arch = "riscv64")]
+mod riscv64_virt;
 
 //--------------------------------------------------------------------------------------------------
 // x86

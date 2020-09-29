@@ -2,6 +2,7 @@ TARGET_AARCH64 := aarch64-unknown-none-softfloat
 LINKER_SCRIPT_AARCH64 := tests/aarch64_raspi3/link.ld
 
 TARGET_RISCV64 := riscv64gc-unknown-none-elf
+LINKER_SCRIPT_RISCV64 := tests/riscv64_virt/link.ld
 
 default:
 	cargo build --target $(TARGET_AARCH64)
@@ -17,6 +18,10 @@ test:
 	RUSTFLAGS="-C link-arg=-T$(LINKER_SCRIPT_AARCH64)" \
 	cargo test \
 	--target $(TARGET_AARCH64) \
+	--release
+	RUSTFLAGS="-C link-arg=-T$(LINKER_SCRIPT_RISCV64)" \
+	cargo test \
+	--target $(TARGET_RISCV64) \
 	--release
 
 fmt:

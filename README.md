@@ -82,6 +82,9 @@ Licensed under either of
 
 at your option.
 
+See the [third party notices file](THIRD_PARTY_NOTICES.md) for more information about third party
+project and their respective licenses
+
 ### Contribution
 
 Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in the
