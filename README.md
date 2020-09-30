@@ -74,8 +74,8 @@ let qemu_exit_handle = qemu_exit::X86::new(io_base, custom_exit_success);
 
 ## Authors
 
-- [**@andre-richter** Andre Richter](https://github.com/andre-richter)
-- [**@Skallwar** Esteban Blanc](https://github.com/Skallwar)
+- [**@andre-richter**](https://github.com/andre-richter) Andre Richter
+- [**@Skallwar**](https://github.com/Skallwar) Esteban Blanc
 
 ## License
 
