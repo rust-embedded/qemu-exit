@@ -33,6 +33,7 @@ jobs:
 
       - name: Install QEMU
         run: |
+          sudo apt update
           sudo apt install qemu-system
 
       - name: Run tests AARCH64
