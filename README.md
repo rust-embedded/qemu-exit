@@ -36,7 +36,7 @@ qemu_exit_handle.exit_failure();
 
 ### AArch64
 
-Pass the `-semihosting` argument to QEMU invocation, e.g.:
+Pass the `-semihosting` argument to the QEMU invocation, e.g.:
 ```
 qemu-system-aarch64 -M raspi3 -serial stdio -semihosting -kernel kernel8.img
 ```
