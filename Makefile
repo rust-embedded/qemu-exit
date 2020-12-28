@@ -5,13 +5,13 @@ TARGET_RISCV64 := riscv64gc-unknown-none-elf
 LINKER_SCRIPT_RISCV64 := tests/riscv64_virt/link.ld
 
 default:
-	cargo build --target $(TARGET_AARCH64)
-	cargo build --target $(TARGET_RISCV64)
-	cargo build
+	cargo build --target $(TARGET_AARCH64) --release
+	cargo build --target $(TARGET_RISCV64) --release
+	cargo build --release
 
 clippy:
 	cargo clippy --target $(TARGET_AARCH64)
-	cargo build --target $(TARGET_RISCV64)
+	cargo clippy --target $(TARGET_RISCV64)
 	cargo clippy
 
 test:

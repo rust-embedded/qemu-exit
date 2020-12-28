@@ -1,6 +1,6 @@
 [package]
 name = "qemu-exit"
-version = "1.0.0"
+version = "1.0.1"
 authors = ["Andre Richter <andre.o.richter@gmail.com>"]
 description = "Exit QEMU with user-defined code"
 homepage = "https://github.com/andre-richter/qemu-exit"

@@ -50,7 +50,11 @@ impl QEMUExit for X86 {
         // Calling `panic!()` here is unfeasible, since there is a good chance this function here is
         // the last expression in the `panic!()` handler itself. This prevents a possible infinite
         // loop.
-        loop {}
+        loop {
+            unsafe {
+                asm!("hlt", options(nomem, nostack));
+            }
+        }
     }
 
     fn exit_success(&self) -> ! {

@@ -4,9 +4,8 @@
 
 //! AArch64 specific setup code.
 
-#[naked]
 #[no_mangle]
-unsafe extern "C" fn _start() -> ! {
+unsafe fn _start() -> ! {
     asm!("mov sp, #0x80000");
 
     super::test_main()

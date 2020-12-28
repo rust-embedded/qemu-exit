@@ -19,7 +19,7 @@ const ADP_Stopped_ApplicationExit: u64 = 0x20026;
 ///
 /// If first paraemter != `ADP_Stopped_ApplicationExit`, exit code `1` is used.
 #[repr(C)]
-struct qemu_parameter_block {
+struct QEMUParameterBlock {
     arg0: u64,
     arg1: u64,
 }
@@ -28,7 +28,7 @@ struct qemu_parameter_block {
 pub struct AArch64 {}
 
 /// A Semihosting call using `0x18` - `SYS_EXIT`.
-fn semihosting_sys_exit_call(block: &qemu_parameter_block) -> ! {
+fn semihosting_sys_exit_call(block: &QEMUParameterBlock) -> ! {
     unsafe {
         asm!(
             "hlt #0xF000",
@@ -36,12 +36,15 @@ fn semihosting_sys_exit_call(block: &qemu_parameter_block) -> ! {
             in("x1") block as *const _ as u64,
             options(nostack)
         );
-    }
 
-    // For the case that the QEMU exit attempt did not work, transition into an infinite loop.
-    // Calling `panic!()` here is unfeasible, since there is a good chance this function here is the
-    // last expression in the `panic!()` handler itself. This prevents a possible infinite loop.
-    loop {}
+        // For the case that the QEMU exit attempt did not work, transition into an infinite loop.
+        // Calling `panic!()` here is unfeasible, since there is a good chance this function here is
+        // the last expression in the `panic!()` handler itself. This prevents a possible
+        // infinite loop.
+        loop {
+            asm!("wfe", options(nomem, nostack));
+        }
+    }
 }
 
 impl AArch64 {
@@ -53,7 +56,7 @@ impl AArch64 {
 
 impl QEMUExit for AArch64 {
     fn exit(&self, code: u32) -> ! {
-        let block = qemu_parameter_block {
+        let block = QEMUParameterBlock {
             arg0: ADP_Stopped_ApplicationExit,
             arg1: code as u64,
         };

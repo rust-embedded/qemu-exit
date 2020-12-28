@@ -5,7 +5,7 @@
 //! RISCV64 specific setup code.
 
 #[no_mangle]
-unsafe extern "C" fn _start() -> ! {
+unsafe fn _start() -> ! {
     asm!("la sp, _stack");
 
     super::test_main()

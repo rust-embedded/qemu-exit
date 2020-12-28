@@ -5,7 +5,6 @@
 //! A simple test that exits QEMU with code 13.
 
 #![feature(asm)]
-#![feature(naked_functions)]
 #![no_main]
 #![no_std]
 
