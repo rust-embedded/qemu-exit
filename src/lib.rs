@@ -71,7 +71,6 @@
 
 #![deny(missing_docs)]
 #![feature(asm)]
-#![feature(const_fn)]
 #![feature(const_panic)]
 #![no_std]
 
