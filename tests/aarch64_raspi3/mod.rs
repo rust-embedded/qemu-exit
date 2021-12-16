@@ -4,6 +4,8 @@
 
 //! AArch64 specific setup code.
 
+use core::arch::asm;
+
 #[no_mangle]
 unsafe fn _start() -> ! {
     asm!("mov sp, #0x80000");

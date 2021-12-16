@@ -5,6 +5,7 @@
 //! x86.
 
 use crate::QEMUExit;
+use core::arch::asm;
 
 const EXIT_FAILURE: u32 = 0; // since ((0 << 1) | 1) = 1.
 
