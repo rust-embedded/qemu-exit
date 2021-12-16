@@ -4,6 +4,8 @@
 
 //! RISCV64 specific setup code.
 
+use core::arch::asm;
+
 #[no_mangle]
 unsafe fn _start() -> ! {
     asm!("la sp, _stack");

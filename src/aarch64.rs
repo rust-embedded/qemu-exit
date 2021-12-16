@@ -5,6 +5,7 @@
 //! AArch64.
 
 use crate::QEMUExit;
+use core::arch::asm;
 
 const EXIT_SUCCESS: u32 = 0;
 const EXIT_FAILURE: u32 = 1;

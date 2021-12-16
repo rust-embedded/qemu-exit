@@ -5,6 +5,7 @@
 //! RISCV64.
 
 use crate::QEMUExit;
+use core::arch::asm;
 
 const EXIT_SUCCESS: u32 = 0x5555; // Equals `exit(0)`.
 
