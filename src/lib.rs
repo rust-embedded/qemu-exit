@@ -71,7 +71,6 @@
 
 #![deny(missing_docs)]
 #![feature(asm)]
-#![feature(const_panic)]
 #![no_std]
 
 #[cfg(target_arch = "aarch64")]
