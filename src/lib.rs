@@ -70,7 +70,6 @@
 //! - [QEMU sifive_test source](https://git.qemu.org/?p=qemu.git;a=blob;f=hw/misc/sifive_test.c)
 
 #![deny(missing_docs)]
-#![feature(asm)]
 #![no_std]
 
 #[cfg(target_arch = "aarch64")]
