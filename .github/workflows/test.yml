@@ -39,7 +39,6 @@ jobs:
       - name: Run tests AARCH64
         if: matrix.target == 'aarch64-unknown-none-softfloat'
         run: |
-          cargo install cargo-binutils
           RUSTFLAGS="-C link-arg=-Ttests/aarch64_raspi3/link.ld" cargo test --target ${{ matrix.target }} --release
 
       - name: Run tests RISCV64

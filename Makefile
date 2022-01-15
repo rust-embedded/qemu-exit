@@ -16,13 +16,13 @@ clippy:
 
 test:
 	RUSTFLAGS="-C link-arg=-T$(LINKER_SCRIPT_AARCH64)" \
-	cargo test \
-	--target $(TARGET_AARCH64) \
-	--release
+                cargo test \
+                --target $(TARGET_AARCH64) \
+                --release
 	RUSTFLAGS="-C link-arg=-T$(LINKER_SCRIPT_RISCV64)" \
-	cargo test \
-	--target $(TARGET_RISCV64) \
-	--release
+                cargo test \
+                --target $(TARGET_RISCV64) \
+                --release
 
 fmt:
 	cargo fmt

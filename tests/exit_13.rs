@@ -4,7 +4,6 @@
 
 //! A simple test that exits QEMU with code 13.
 
-#![feature(asm)]
 #![no_main]
 #![no_std]
 
