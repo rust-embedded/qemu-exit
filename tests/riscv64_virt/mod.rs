@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 //
-// Copyright (c) 2019-2021 Esteban Blanc <estblcsk@gmail.com>
+// Copyright (c) 2019-2022 Esteban Blanc <estblcsk@gmail.com>
 
 //! RISCV64 specific setup code.
 
