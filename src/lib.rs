@@ -21,7 +21,7 @@
 //!
 //! // io_base:             I/O-base of isa-debug-exit.
 //! // custom_exit_success: A custom success code; Must be an odd number.
-//! #[cfg(target_arch = "x86_64")]
+//! #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 //! let qemu_exit_handle = qemu_exit::X86::new(io_base, custom_exit_success);
 //!
 //! qemu_exit_handle.exit(1337);
@@ -84,10 +84,10 @@ pub mod riscv64;
 #[cfg(target_arch = "riscv64")]
 pub use riscv64::*;
 
-#[cfg(target_arch = "x86_64")]
+#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 pub mod x86;
 
-#[cfg(target_arch = "x86_64")]
+#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 pub use x86::*;
 
 /// Generic interface for exiting QEMU.

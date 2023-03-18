@@ -2,14 +2,14 @@
 //
 // Copyright (c) 2019-2022 Andre Richter <andre.o.richter@gmail.com>
 
-//! x86.
+//! x86 (i386) and x86_64.
 
 use crate::QEMUExit;
 use core::arch::asm;
 
 const EXIT_FAILURE: u32 = 0; // since ((0 << 1) | 1) = 1.
 
-/// x86 configuration.
+/// x86/x86_64 configuration.
 pub struct X86 {
     /// Port number of the isa-debug-exit device.
     io_base: u16,
