@@ -24,7 +24,7 @@ let qemu_exit_handle = qemu_exit::RISCV64::new(addr);
 
 // io_base:             I/O-base of isa-debug-exit.
 // custom_exit_success: A custom success code; Must be an odd number.
-#[cfg(target_arch = "x86_64")]
+#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 let qemu_exit_handle = qemu_exit::X86::new(io_base, custom_exit_success);
 
 qemu_exit_handle.exit(1337);
@@ -48,7 +48,7 @@ You need to chose a machine with the `sifive_test` device, for exemple `-M virt`
 qemu-system-riscv64 -M virt -nographic -monitor none -serial stdio -kernel kernel.elf
 ```
 
-### x86_64
+### x86/x86_64
 
 Add the special ISA debug exit device by passing the flags:
 ```
