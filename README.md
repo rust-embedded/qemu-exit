@@ -70,7 +70,7 @@ let qemu_exit_handle = qemu_exit::X86::new(io_base, custom_exit_success);
 
 ## Literature
 
-- [Semihosting for AArch32 and AArch64](https://static.docs.arm.com/dui0003/b/semihosting.pdf)
+- [Semihosting for AArch32 and AArch64](https://github.com/ARM-software/abi-aa/blob/main/semihosting/semihosting.rst)
 - [QEMU isa-debug-exit source](https://git.qemu.org/?p=qemu.git;a=blob;f=hw/misc/debugexit.c)
 - [QEMU sifive_test source](https://git.qemu.org/?p=qemu.git;a=blob;f=hw/misc/sifive_test.c)
 
