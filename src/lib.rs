@@ -65,9 +65,9 @@
 //!
 //! ## Literature
 //!
-//! - [Semihosting for AArch32 and AArch64](https://static.docs.arm.com/dui0003/b/semihosting.pdf)
-//! - [QEMU isa-debug-exit source](https://git.qemu.org/?p=qemu.git;a=blob;f=hw/misc/debugexit.c)
-//! - [QEMU sifive_test source](https://git.qemu.org/?p=qemu.git;a=blob;f=hw/misc/sifive_test.c)
+//! - [Semihosting for AArch32 and AArch64](https://github.com/ARM-software/abi-aa/blob/main/semihosting/semihosting.rst)
+//! - [QEMU isa-debug-exit source](https://gitlab.com/qemu-project/qemu/-/blob/master/hw/misc/debugexit.c)
+//! - [QEMU sifive_test source](https://gitlab.com/qemu-project/qemu/-/blob/master/hw/misc/sifive_test.c)
 
 #![deny(missing_docs)]
 #![no_std]
