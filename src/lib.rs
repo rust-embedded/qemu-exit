@@ -15,6 +15,9 @@
 //! #[cfg(target_arch = "aarch64")]
 //! let qemu_exit_handle = qemu_exit::AArch64::new();
 //!
+//! #[cfg(target_arch = "arm")]
+//! let qemu_exit_handle = qemu_exit::Aarch32::new();
+//!
 //! // addr: The address of sifive_test.
 //! #[cfg(target_arch = "riscv64")]
 //! let qemu_exit_handle = qemu_exit::RISCV64::new(addr);
@@ -36,6 +39,15 @@
 //! Pass the `-semihosting` argument to the QEMU invocation, e.g.:
 //! ```
 //! qemu-system-aarch64 -M raspi3 -serial stdio -semihosting -kernel kernel8.img
+//!
+//! ```
+//!
+//! ### AArch32
+//!
+//! Pass the `-semihosting` argument to the QEMU invocation, e.g.:
+//! ```
+//! qemu-system-arm -m 16M -nographic -M mps2-an500 -cpu cortex-m7 -serial mon:stdio -semihosting -kernel kernel.img
+//!
 //! ```
 //!
 //! ### RISCV64
@@ -77,6 +89,12 @@ pub mod aarch64;
 
 #[cfg(target_arch = "aarch64")]
 pub use aarch64::*;
+
+#[cfg(target_arch = "arm")]
+pub mod aarch32;
+
+#[cfg(target_arch = "arm")]
+pub use aarch32::*;
 
 #[cfg(target_arch = "riscv64")]
 pub mod riscv64;
