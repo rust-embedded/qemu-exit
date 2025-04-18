@@ -6,9 +6,7 @@
 
 use core::arch::global_asm;
 
-global_asm!(
-    include_str!("./startup.S")
-);
+global_asm!(include_str!("./startup.S"));
 
 #[no_mangle]
 extern "C" fn entry() {

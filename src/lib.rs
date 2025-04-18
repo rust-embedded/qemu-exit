@@ -36,23 +36,24 @@
 //!
 //! ### AArch64
 //!
-//! Pass the `-semihosting` argument to the QEMU invocation, e.g.:
+//! Pass the `-semihosting` argument to the QEMU invocation, e.g.
+//!
 //! ```
 //! qemu-system-aarch64 -M raspi3 -serial stdio -semihosting -kernel kernel8.img
-//!
 //! ```
 //!
 //! ### AArch32
 //!
-//! Pass the `-semihosting` argument to the QEMU invocation, e.g.:
+//! Pass the `-semihosting` argument to the QEMU invocation, e.g.
+//!
 //! ```
 //! qemu-system-arm -m 16M -nographic -M mps2-an500 -cpu cortex-m7 -serial mon:stdio -semihosting -kernel kernel.img
-//!
 //! ```
 //!
 //! ### RISCV64
 //!
 //! You need to chose a machine with the `sifive_test` device, for exemple `-M virt`:
+//!
 //! ```
 //! qemu-system-riscv64 -M virt -nographic -monitor none -serial stdio -kernel kernel.elf
 //! ```
@@ -60,6 +61,7 @@
 //! ### x86_64
 //!
 //! Add the special ISA debug exit device by passing the flags:
+//!
 //! ```
 //! -device isa-debug-exit,iobase=0xf4,iosize=0x04
 //! ```
