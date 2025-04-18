@@ -35,11 +35,13 @@ qemu_exit_handle.exit_failure();
 
 ## Architecture Specific Configuration
 
-### AArch64
+### AArch64/AArch32
 
 Pass the `-semihosting` argument to the QEMU invocation, e.g.:
 ```
 qemu-system-aarch64 -M raspi3 -serial stdio -semihosting -kernel kernel8.img
+qemu-system-arm -nographic -M mps2-an500 -cpu cortex-m7 -serial mon:stdio -semihosting -kernel
+kernel.img
 ```
 
 ### RISCV64
