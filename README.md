@@ -58,7 +58,8 @@ Add the special ISA debug exit device by passing the flags:
 -device isa-debug-exit,iobase=0xf4,iosize=0x04
 ```
 
-When instantiating the handle, `iobase` must be given as the first parameter.
+When instantiating the handle with `qemu_exit::X86::new()`, `iobase` must be given as the first
+parameter.
 
 The second parameter must be an `EXIT_SUCCESS` code of your choice that is an odd number, aka
 bit number zero must be `1`. This is needed because in QEMU, the provided code is internally
@@ -68,6 +69,18 @@ possible to let QEMU invoke `exit(0)`.
 ```rust
 let qemu_exit_handle = qemu_exit::X86::new(io_base, custom_exit_success);
 ```
+
+#### x86/x86_64 Linux
+
+To use this mechanism from Linux userspace, the kernel must be compiled with
+`CONFIG_X86_IOPL_IOPERM=y` (which is the default) and the process must start with root privileges
+(or `CAP_SYS_RAWIO`) and call: [`ioperm(2)`](https://man7.org/linux/man-pages/man2/ioperm.2.html):
+```rust
+nix::errno::Errno::result(unsafe { libc::ioperm( 0xf4, 4, 1 )}).expect("ioperm failed");
+```
+
+Privileges/capabilities can then be dropped. Normal users can subsequently call
+`qemu_exit_handle.exit*()`.
 
 ## Literature
 
