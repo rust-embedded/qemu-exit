@@ -4,18 +4,19 @@ on:
   merge_group:
   workflow_dispatch:
   pull_request:
+    branches:
+      - main
   push:
     branches:
-      - master
+      - main
   schedule:
     - cron: "0 5 * * *"
 
 jobs:
-
   build:
     name: Build Library
     runs-on: ubuntu-latest
-    env: {"RUSTFLAGS": "-D warnings"}
+    env: { "RUSTFLAGS": "-D warnings" }
     strategy:
       matrix:
         target:
@@ -28,7 +29,7 @@ jobs:
           toolchain: nightly
           target: ${{ matrix.target }}
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: cargo build
         run: cargo build --target ${{ matrix.target }}
@@ -37,7 +38,7 @@ jobs:
     name: Format
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: dtolnay/rust-toolchain@master
         with:
           toolchain: nightly
@@ -59,10 +60,10 @@ jobs:
         with:
           toolchain: nightly
           target: ${{ matrix.target }}
-          components: llvm-tools-preview
+          components: llvm-tools
 
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install QEMU
         run: |
