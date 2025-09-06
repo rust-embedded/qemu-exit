@@ -26,7 +26,7 @@ const fn exit_code_encode(code: u32) -> u32 {
 
 impl RISCV64 {
     /// Create an instance.
-    pub const fn new(addr: u64) -> Self {
+    pub const unsafe fn new(addr: u64) -> Self {
         RISCV64 { addr }
     }
 }
