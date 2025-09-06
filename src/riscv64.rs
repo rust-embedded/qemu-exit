@@ -26,7 +26,11 @@ const fn exit_code_encode(code: u32) -> u32 {
 
 impl RISCV64 {
     /// Create an instance.
-    pub const fn new(addr: u64) -> Self {
+    ///
+    /// # Safety
+    ///
+    /// The provided `addr` must be the address of the qemu `sifive_test` device.
+    pub const unsafe fn new(addr: u64) -> Self {
         RISCV64 { addr }
     }
 }

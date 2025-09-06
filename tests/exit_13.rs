@@ -35,7 +35,7 @@ mod armv7m_mps2an500;
 //--------------------------------------------------------------------------------------------------
 
 #[cfg(target_arch = "riscv64")]
-const QEMU_EXIT_HANDLE: qemu_exit::RISCV64 = qemu_exit::RISCV64::new(0x100000);
+const QEMU_EXIT_HANDLE: qemu_exit::RISCV64 = unsafe { qemu_exit::RISCV64::new(0x100000) };
 
 #[cfg(target_arch = "riscv64")]
 mod riscv64_virt;
@@ -45,7 +45,7 @@ mod riscv64_virt;
 //--------------------------------------------------------------------------------------------------
 
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
-const QEMU_EXIT_HANDLE: qemu_exit::X86 = qemu_exit::X86::new(0xf4, 5);
+const QEMU_EXIT_HANDLE: qemu_exit::X86 = unsafe { qemu_exit::X86::new(0xf4, 5) };
 
 //--------------------------------------------------------------------------------------------------
 // Generic code
