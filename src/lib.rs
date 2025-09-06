@@ -9,7 +9,7 @@
 //!
 //! ## TL;DR
 //!
-//! ```rust
+//! ```ignore
 //! use qemu_exit::QEMUExit;
 //!
 //! #[cfg(target_arch = "aarch64")]
@@ -38,7 +38,7 @@
 //!
 //! Pass the `-semihosting` argument to the QEMU invocation, e.g.
 //!
-//! ```
+//! ```bash
 //! qemu-system-aarch64 -M raspi3 -serial stdio -semihosting -kernel kernel8.img
 //! ```
 //!
@@ -46,7 +46,7 @@
 //!
 //! Pass the `-semihosting` argument to the QEMU invocation, e.g.
 //!
-//! ```
+//! ```bash
 //! qemu-system-arm -m 16M -nographic -M mps2-an500 -cpu cortex-m7 -serial mon:stdio -semihosting -kernel kernel.img
 //! ```
 //!
@@ -54,7 +54,7 @@
 //!
 //! You need to chose a machine with the `sifive_test` device, for exemple `-M virt`:
 //!
-//! ```
+//! ```bash
 //! qemu-system-riscv64 -M virt -nographic -monitor none -serial stdio -kernel kernel.elf
 //! ```
 //!
@@ -62,7 +62,7 @@
 //!
 //! Add the special ISA debug exit device by passing the flags:
 //!
-//! ```
+//! ```bash
 //! -device isa-debug-exit,iobase=0xf4,iosize=0x04
 //! ```
 //!
@@ -73,7 +73,7 @@
 //! binary-OR'ed with `0x1`. This is hardcoded and therefore, with `isa-debug-exit`, it is not
 //! possible to let QEMU invoke `exit(0)`.
 //!
-//! ```rust
+//! ```ignore
 //! let qemu_exit_handle = qemu_exit::X86::new(io_base, custom_exit_success);
 //! ```
 //!
