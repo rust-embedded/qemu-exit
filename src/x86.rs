@@ -33,7 +33,7 @@ fn outl(io_base: u16, code: u32) {
 
 impl X86 {
     /// Create an instance.
-    pub const fn new(io_base: u16, custom_exit_success: u32) -> Self {
+    pub const unsafe fn new(io_base: u16, custom_exit_success: u32) -> Self {
         assert!((custom_exit_success & 1) == 1);
 
         X86 {
