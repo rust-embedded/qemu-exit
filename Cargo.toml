@@ -8,14 +8,14 @@ repository = "https://github.com/rust-embedded/qemu-exit"
 readme = "README.md"
 keywords = ["aarch64", "x86_64", "risc-v", "qemu", "exit"]
 categories = ["embedded", "hardware-support", "no-std"]
-license = "MIT/Apache-2.0"
+license = "MIT OR Apache-2.0"
 edition = "2018"
 exclude = [
         ".editorconfig",
         ".gitignore",
         ".rustfmt.toml",
         ".vscode",
-        "Makefile"
+        "Makefile",
 ]
 
 ##--------------------------------------------------------------------------------------------------
